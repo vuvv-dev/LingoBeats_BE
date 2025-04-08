@@ -2,7 +2,7 @@
 
 namespace Base.DataBaseAndIdentity.Entities;
 
-public class AdditionalUserInformationEntity : BaseEntity<Guid>
+public sealed class AdditionalUserInformationEntity : BaseEntity<Guid>
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }

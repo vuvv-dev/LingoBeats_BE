@@ -19,13 +19,28 @@ namespace Base.DataBaseAndIdentity.Migrations.M_AppDbContext
                 .Annotation("Npgsql:CollationDefinition:case_insensitive", "en-u-ks-primary,en-u-ks-primary,icu,False");
 
             migrationBuilder.CreateTable(
-                name: "role",
+                name: "AspNetRoles",
                 schema: "myspace",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "role",
+                schema: "myspace",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    NormalizedName = table.Column<string>(type: "text", nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
@@ -60,7 +75,7 @@ namespace Base.DataBaseAndIdentity.Migrations.M_AppDbContext
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetRoleClaims",
+                name: "role_claim",
                 schema: "myspace",
                 columns: table => new
                 {
@@ -72,12 +87,12 @@ namespace Base.DataBaseAndIdentity.Migrations.M_AppDbContext
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetRoleClaims", x => x.Id);
+                    table.PrimaryKey("PK_role_claim", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetRoleClaims_role_RoleId",
+                        name: "FK_role_claim_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalSchema: "myspace",
-                        principalTable: "role",
+                        principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -105,7 +120,7 @@ namespace Base.DataBaseAndIdentity.Migrations.M_AppDbContext
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUserClaims",
+                name: "user_claim",
                 schema: "myspace",
                 columns: table => new
                 {
@@ -117,121 +132,12 @@ namespace Base.DataBaseAndIdentity.Migrations.M_AppDbContext
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetUserClaims_user_UserId",
-                        column: x => x.UserId,
-                        principalSchema: "myspace",
-                        principalTable: "user",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUserLogins",
-                schema: "myspace",
-                columns: table => new
-                {
-                    LoginProvider = table.Column<string>(type: "text", nullable: false),
-                    ProviderKey = table.Column<string>(type: "text", nullable: false),
-                    ProviderDisplayName = table.Column<string>(type: "text", nullable: true),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserLogins_user_UserId",
-                        column: x => x.UserId,
-                        principalSchema: "myspace",
-                        principalTable: "user",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUserRoles",
-                schema: "myspace",
-                columns: table => new
-                {
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    RoleId = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserRoles_role_RoleId",
-                        column: x => x.RoleId,
-                        principalSchema: "myspace",
-                        principalTable: "role",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AspNetUserRoles_user_UserId",
-                        column: x => x.UserId,
-                        principalSchema: "myspace",
-                        principalTable: "user",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUserTokens",
-                schema: "myspace",
-                columns: table => new
-                {
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    LoginProvider = table.Column<string>(type: "text", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Value = table.Column<string>(type: "text", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserTokens_user_UserId",
-                        column: x => x.UserId,
-                        principalSchema: "myspace",
-                        principalTable: "user",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "role_claim",
-                schema: "myspace",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_role_claim", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_role_claim_AspNetRoleClaims_Id",
-                        column: x => x.Id,
-                        principalSchema: "myspace",
-                        principalTable: "AspNetRoleClaims",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "user_claim",
-                schema: "myspace",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
                     table.PrimaryKey("PK_user_claim", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_user_claim_AspNetUserClaims_Id",
-                        column: x => x.Id,
+                        name: "FK_user_claim_user_UserId",
+                        column: x => x.UserId,
                         principalSchema: "myspace",
-                        principalTable: "AspNetUserClaims",
+                        principalTable: "user",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -242,17 +148,46 @@ namespace Base.DataBaseAndIdentity.Migrations.M_AppDbContext
                 columns: table => new
                 {
                     LoginProvider = table.Column<string>(type: "text", nullable: false),
-                    ProviderKey = table.Column<string>(type: "text", nullable: false)
+                    ProviderKey = table.Column<string>(type: "text", nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "text", nullable: true),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_user_login", x => new { x.LoginProvider, x.ProviderKey });
                     table.ForeignKey(
-                        name: "FK_user_login_AspNetUserLogins_LoginProvider_ProviderKey",
-                        columns: x => new { x.LoginProvider, x.ProviderKey },
+                        name: "FK_user_login_user_UserId",
+                        column: x => x.UserId,
                         principalSchema: "myspace",
-                        principalTable: "AspNetUserLogins",
-                        principalColumns: new[] { "LoginProvider", "ProviderKey" },
+                        principalTable: "user",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "user_role",
+                schema: "myspace",
+                columns: table => new
+                {
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    RoleId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_user_role", x => new { x.UserId, x.RoleId });
+                    table.ForeignKey(
+                        name: "FK_user_role_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalSchema: "myspace",
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_user_role_user_UserId",
+                        column: x => x.UserId,
+                        principalSchema: "myspace",
+                        principalTable: "user",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -264,50 +199,32 @@ namespace Base.DataBaseAndIdentity.Migrations.M_AppDbContext
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     LoginProvider = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    expire_at = table.Column<DateTime>(type: "TIMESTAMP WITH TIME ZONE", nullable: false)
+                    Value = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_user_token", x => new { x.UserId, x.LoginProvider, x.Name });
                     table.ForeignKey(
-                        name: "FK_user_token_AspNetUserTokens_UserId_LoginProvider_Name",
-                        columns: x => new { x.UserId, x.LoginProvider, x.Name },
+                        name: "FK_user_token_user_UserId",
+                        column: x => x.UserId,
                         principalSchema: "myspace",
-                        principalTable: "AspNetUserTokens",
-                        principalColumns: new[] { "UserId", "LoginProvider", "Name" },
+                        principalTable: "user",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetRoleClaims_RoleId",
-                schema: "myspace",
-                table: "AspNetRoleClaims",
-                column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserClaims_UserId",
-                schema: "myspace",
-                table: "AspNetUserClaims",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserLogins_UserId",
-                schema: "myspace",
-                table: "AspNetUserLogins",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserRoles_RoleId",
-                schema: "myspace",
-                table: "AspNetUserRoles",
-                column: "RoleId");
-
-            migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
                 schema: "myspace",
-                table: "role",
+                table: "AspNetRoles",
                 column: "NormalizedName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_role_claim_RoleId",
+                schema: "myspace",
+                table: "role_claim",
+                column: "RoleId");
 
             migrationBuilder.CreateIndex(
                 name: "EmailIndex",
@@ -321,6 +238,24 @@ namespace Base.DataBaseAndIdentity.Migrations.M_AppDbContext
                 table: "user",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_user_claim_UserId",
+                schema: "myspace",
+                table: "user_claim",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_user_login_UserId",
+                schema: "myspace",
+                table: "user_login",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_user_role_RoleId",
+                schema: "myspace",
+                table: "user_role",
+                column: "RoleId");
         }
 
         /// <inheritdoc />
@@ -331,7 +266,7 @@ namespace Base.DataBaseAndIdentity.Migrations.M_AppDbContext
                 schema: "myspace");
 
             migrationBuilder.DropTable(
-                name: "AspNetUserRoles",
+                name: "role",
                 schema: "myspace");
 
             migrationBuilder.DropTable(
@@ -347,27 +282,15 @@ namespace Base.DataBaseAndIdentity.Migrations.M_AppDbContext
                 schema: "myspace");
 
             migrationBuilder.DropTable(
+                name: "user_role",
+                schema: "myspace");
+
+            migrationBuilder.DropTable(
                 name: "user_token",
                 schema: "myspace");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoleClaims",
-                schema: "myspace");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUserClaims",
-                schema: "myspace");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUserLogins",
-                schema: "myspace");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUserTokens",
-                schema: "myspace");
-
-            migrationBuilder.DropTable(
-                name: "role",
+                name: "AspNetRoles",
                 schema: "myspace");
 
             migrationBuilder.DropTable(

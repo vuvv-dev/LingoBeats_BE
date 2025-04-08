@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Base.DataBaseAndIdentity.Entities;
 
-public class IdentityUserLoginEntity : IdentityUserLogin<Guid>
+public sealed class IdentityUserLoginEntity : IdentityUserLogin<Guid>
 {
     public static class Metadata
     {

@@ -2,7 +2,7 @@
 
 namespace Base.DataBaseAndIdentity.Entities;
 
-public class IdentityRoleEntity : IdentityRole<Guid>
+public sealed class IdentityRoleEntity : IdentityRole<Guid>
 {
     public static class Metadata
     {

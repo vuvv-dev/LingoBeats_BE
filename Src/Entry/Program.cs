@@ -16,9 +16,9 @@ await service.RegisterRequireServices(configuration);
 
 var app = builder.Build();
 
-await using (var sope = app.Services.CreateAsyncScope())
+await using (var scope = app.Services.CreateAsyncScope())
 {
-    var context = sope.ServiceProvider.GetRequiredService<AppDbContext>();
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     var connect = await context.Database.CanConnectAsync();
     if (!connect)
     {
@@ -31,6 +31,7 @@ await using (var sope = app.Services.CreateAsyncScope())
 if (app.Environment.IsDevelopment())
 {
     app.UseRouting()
+        .UseCors()
         .UseAuthentication()
         .UseAuthorization()
         .UseOpenApi()

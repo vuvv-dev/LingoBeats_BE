@@ -19,6 +19,12 @@ internal static class RegistrationCenter
             config.SuppressAsyncSuffixInActionNames = false;
         });
 
+        services.AddCors(config =>
+            config.AddDefaultPolicy(policy =>
+                policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()
+            )
+        );
+
         services.AddHttpContextAccessor().MakeSingletonLazy<IHttpContextAccessor>();
 
         return services;

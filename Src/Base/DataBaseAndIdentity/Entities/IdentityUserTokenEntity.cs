@@ -1,5 +1,4 @@
-﻿using Base.DataBaseAndIdentity.Common;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace Base.DataBaseAndIdentity.Entities;
 

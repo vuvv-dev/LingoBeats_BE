@@ -76,7 +76,7 @@ namespace Base.DataBaseAndIdentity.Migrations.M_AppDbContext
                         .IsUnique()
                         .HasDatabaseName("RoleNameIndex");
 
-                    b.ToTable("role", "myspace");
+                    b.ToTable("AspNetRoles", "myspace");
                 });
 
             modelBuilder.Entity("Base.DataBaseAndIdentity.Entities.IdentityUserEntity", b =>
@@ -144,6 +144,26 @@ namespace Base.DataBaseAndIdentity.Migrations.M_AppDbContext
                     b.ToTable("user", "myspace");
                 });
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("NormalizedName")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("role", "myspace");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.Property<int>("Id")
@@ -165,9 +185,7 @@ namespace Base.DataBaseAndIdentity.Migrations.M_AppDbContext
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims", "myspace");
-
-                    b.UseTptMappingStrategy();
+                    b.ToTable("role_claim", "myspace");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
@@ -191,9 +209,7 @@ namespace Base.DataBaseAndIdentity.Migrations.M_AppDbContext
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims", "myspace");
-
-                    b.UseTptMappingStrategy();
+                    b.ToTable("user_claim", "myspace");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
@@ -214,9 +230,7 @@ namespace Base.DataBaseAndIdentity.Migrations.M_AppDbContext
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins", "myspace");
-
-                    b.UseTptMappingStrategy();
+                    b.ToTable("user_login", "myspace");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
@@ -231,7 +245,7 @@ namespace Base.DataBaseAndIdentity.Migrations.M_AppDbContext
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetUserRoles", "myspace");
+                    b.ToTable("user_role", "myspace");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
@@ -245,35 +259,21 @@ namespace Base.DataBaseAndIdentity.Migrations.M_AppDbContext
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(34)
+                        .HasColumnType("character varying(34)");
+
                     b.Property<string>("Value")
                         .HasColumnType("text");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens", "myspace");
+                    b.ToTable("user_token", "myspace");
 
-                    b.UseTptMappingStrategy();
-                });
+                    b.HasDiscriminator().HasValue("IdentityUserToken<Guid>");
 
-            modelBuilder.Entity("Base.DataBaseAndIdentity.Entities.IdentityRoleClaimEntity", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>");
-
-                    b.ToTable("role_claim", "myspace");
-                });
-
-            modelBuilder.Entity("Base.DataBaseAndIdentity.Entities.IdentityUserClaimEntity", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>");
-
-                    b.ToTable("user_claim", "myspace");
-                });
-
-            modelBuilder.Entity("Base.DataBaseAndIdentity.Entities.IdentityUserLoginEntity", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>");
-
-                    b.ToTable("user_login", "myspace");
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Base.DataBaseAndIdentity.Entities.IdentityUserTokenEntity", b =>
@@ -281,10 +281,10 @@ namespace Base.DataBaseAndIdentity.Migrations.M_AppDbContext
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>");
 
                     b.Property<DateTime>("ExpireAt")
-                        .HasColumnType("TIMESTAMP WITH TIME ZONE")
+                        .HasColumnType("timestamp with time zone")
                         .HasColumnName("expire_at");
 
-                    b.ToTable("user_token", "myspace");
+                    b.HasDiscriminator().HasValue("IdentityUserTokenEntity");
                 });
 
             modelBuilder.Entity("Base.DataBaseAndIdentity.Entities.AdditionalUserInformationEntity", b =>
@@ -345,42 +345,6 @@ namespace Base.DataBaseAndIdentity.Migrations.M_AppDbContext
                     b.HasOne("Base.DataBaseAndIdentity.Entities.IdentityUserEntity", null)
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Base.DataBaseAndIdentity.Entities.IdentityRoleClaimEntity", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", null)
-                        .WithOne()
-                        .HasForeignKey("Base.DataBaseAndIdentity.Entities.IdentityRoleClaimEntity", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Base.DataBaseAndIdentity.Entities.IdentityUserClaimEntity", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", null)
-                        .WithOne()
-                        .HasForeignKey("Base.DataBaseAndIdentity.Entities.IdentityUserClaimEntity", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Base.DataBaseAndIdentity.Entities.IdentityUserLoginEntity", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", null)
-                        .WithOne()
-                        .HasForeignKey("Base.DataBaseAndIdentity.Entities.IdentityUserLoginEntity", "LoginProvider", "ProviderKey")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Base.DataBaseAndIdentity.Entities.IdentityUserTokenEntity", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", null)
-                        .WithOne()
-                        .HasForeignKey("Base.DataBaseAndIdentity.Entities.IdentityUserTokenEntity", "UserId", "LoginProvider", "Name")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

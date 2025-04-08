@@ -1,13 +1,14 @@
 ﻿using Base.DataBaseAndIdentity.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Base.DataBaseAndIdentity.EntitiesConfigurations;
 
 public class BaseIdentityUserLoginEntityConfiguration
-    : IEntityTypeConfiguration<IdentityUserLoginEntity>
+    : IEntityTypeConfiguration<IdentityUserLogin<Guid>>
 {
-    public void Configure(EntityTypeBuilder<IdentityUserLoginEntity> builder)
+    public void Configure(EntityTypeBuilder<IdentityUserLogin<Guid>> builder)
     {
         builder.ToTable(IdentityUserLoginEntity.Metadata.TableName);
     }

@@ -2,7 +2,7 @@
 
 namespace Base.DataBaseAndIdentity.Entities;
 
-public class IdentityUserEntity : IdentityUser<Guid>
+public sealed class IdentityUserEntity : IdentityUser<Guid>
 {
     #region Navigations
     public AdditionalUserInformationEntity AdditionUserInformation { get; set; }

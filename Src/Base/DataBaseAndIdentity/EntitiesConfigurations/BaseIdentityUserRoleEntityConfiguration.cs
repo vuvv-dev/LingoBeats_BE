@@ -1,13 +1,15 @@
 ﻿using Base.DataBaseAndIdentity.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Base.DataBaseAndIdentity.EntitiesConfigurations;
 
-public class BaseIdentityUserRoleEntityConfiguration : IEntityTypeConfiguration<IdentityRoleEntity>
+public class BaseIdentityUserRoleEntityConfiguration
+    : IEntityTypeConfiguration<IdentityUserRole<Guid>>
 {
-    public void Configure(EntityTypeBuilder<IdentityRoleEntity> builder)
+    public void Configure(EntityTypeBuilder<IdentityUserRole<Guid>> builder)
     {
-        builder.ToTable(IdentityRoleEntity.Metadata.TableName);
+        builder.ToTable(IdentityUserRoleEntity.Metadata.TableName);
     }
 }
