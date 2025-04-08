@@ -2,7 +2,7 @@
 
 internal static class Constant
 {
-    public const string DatabaseSchema = "myspace";
+    public const string DatabaseSchema = "lingobeats";
 
     public static class Collation
     {
